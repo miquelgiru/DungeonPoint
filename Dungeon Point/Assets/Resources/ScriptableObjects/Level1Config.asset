@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc85dee7cd98a64a8ee985aea0be0f3, type: 3}
+  m_Name: Level1Config
+  m_EditorClassIdentifier: 
+  DefaultEntryPos: 1
+  CustomEntryPos: {x: 0, y: 0, z: 0}
+  EntryPrefrab: {fileID: 7534147902907135324, guid: b2e0487ce4d71f94bbcb6096a2a2ddae,
+    type: 3}
+  RandomExitPos: 1
+  CustomExitPos: {x: 0, y: 0, z: 0}
+  ExitPrefab: {fileID: 187209420700865907, guid: ea0824ea397876746be6e0a491958026,
+    type: 3}
+  RandomEnemyPos: 1
+  enemies:
+  - CustomEnemyPos: {x: 0, y: 0, z: 0}
+    PrefabEnemy: {fileID: 2970526675264008192, guid: dca083f1f47997242b586cc2951a4b02,
+      type: 3}
+  - CustomEnemyPos: {x: 0, y: 0, z: 0}
+    PrefabEnemy: {fileID: 2970526675264008192, guid: dca083f1f47997242b586cc2951a4b02,
+      type: 3}
+  RandomItemPos: 1
+  items:
+  - CustomItemPos: {x: 0, y: 0, z: 0}
+    PrefabItem: {fileID: 7695424598861264928, guid: 3e6aeaf3d7d59824ba6e8b2a39c41b65,
+      type: 3}
+  - CustomItemPos: {x: 0, y: 0, z: 0}
+    PrefabItem: {fileID: 1142959308927443128, guid: f7baf3996e97af143a4fa11620d08c0d,
+      type: 3}
