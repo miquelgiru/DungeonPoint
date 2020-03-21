@@ -47,3 +47,9 @@ TagManager:
   - name: Element
     uniqueID: 194405079
     locked: 0
+  - name: Blocked
+    uniqueID: 3669235703
+    locked: 0
+  - name: Popup
+    uniqueID: 222121495
+    locked: 0

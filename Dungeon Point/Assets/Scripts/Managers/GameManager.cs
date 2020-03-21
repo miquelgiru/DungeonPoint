@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,27 +18,34 @@ public class GameManager : MonoBehaviour
     private List<Element> allElements = new List<Element>();
     private Dictionary<GridTile, Element> tileElements = new Dictionary<GridTile, Element>();
 
+    [SerializeField] GameObject GameOverPopup;
+    [SerializeField] GameObject EnemyPopup;
+
+    [SerializeField] Text HealthHUD;
+    [SerializeField] Text AttackHUD;
+    [SerializeField] Text MovesHUD;
+
+
     private void Awake()
     {
         instance = this;
         Player = new Player(playerStats.HealthPoints, playerStats.DamageAttackPoints);
-
+    }
+    // Use this for initialization
+    void Start()
+    {
         //Events
         Pathfinder.Instance.OnPathfindFinished += NewPathFound;
         InputManager.Instance.OnTileSelected += TileSelected;
         InputManager.Instance.OnEnemySelected += EnemySelected;
 
-    }
-    // Use this for initialization
-    void Start()
-    {
         GridManager.Instance.Init();
         Pathfinder.Instance.WantToFindNewPath(GridManager.Instance.EntryPoint, GridManager.Instance.ExitPoint);
 
         StartCoroutine(LateStart(1.0f));
     }
 
-    IEnumerator LateStart(float waitTime)
+    private IEnumerator LateStart(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
 
@@ -83,11 +92,13 @@ public class GameManager : MonoBehaviour
 
     public void NewPathFound(List<GridNode> nodes)
     {
-        Debug.Log(nodes.Count);
+        MovesHUD.text = nodes.Count.ToString();
     }
 
     public void TileSelected(GridTile tile)
     {
+        Pathfinder.Instance.WantToFindNewPath(tile.Node, GridManager.Instance.ExitPoint);
+
         Player.MovePlayer(tile.Node.X, tile.Node.Z);
         GridManager.Instance.UpdateTileNodes(tile);
 
@@ -98,6 +109,8 @@ public class GameManager : MonoBehaviour
             if(item != null)
                 item.ItemSelected(Player);
         }
+
+        UpdatPlayerHUD();
     }
 
     public void EnemySelected(Enemy enemy)
@@ -107,6 +120,26 @@ public class GameManager : MonoBehaviour
 
     public void DungeonPassed()
     {
-        Debug.Log("DungeonPassed survived");
+        Debug.Log("Dungeon survived");
+        SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+    }
+
+    private void UpdatPlayerHUD()
+    {
+        HealthHUD.text = Player.PlayerHealth.ToString();
+        AttackHUD.text = Player.PlayerAttack.ToString();
+    }
+
+    public void PlayerDead()
+    {
+        StartCoroutine(GameOverCoroutine());
+    }
+
+    private IEnumerator GameOverCoroutine()
+    {
+        GameOverPopup.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+
+        SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
     }
 }

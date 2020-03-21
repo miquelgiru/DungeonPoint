@@ -55,6 +55,6 @@ public class Player
 
     public void Die()
     {
-
+        GameManager.Instance.PlayerDead();
     }
 }

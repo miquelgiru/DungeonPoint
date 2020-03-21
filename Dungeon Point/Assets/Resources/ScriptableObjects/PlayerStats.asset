@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 430d79392f774ef47b80d32a9830d8b9, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  HealthPoints: 5
+  HealthPoints: 2
   DamageAttackPoints: 2
