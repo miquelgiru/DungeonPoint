@@ -18,6 +18,11 @@ public class ItemConfig
 [CreateAssetMenu(fileName = "GridElementsConfig", menuName = "MapConfig/GridElementsConfig", order = 1)]
 public class GridElementsConfig : ScriptableObject
 {
+    [Header("Map Size")]
+    [SerializeField] public int SizeX;
+    [SerializeField] public int SizeY;
+    [SerializeField] public int SizeZ;
+
     [Header("Entry Point")]
     public bool DefaultEntryPos = true;
     public Vector3 CustomEntryPos;

@@ -20,8 +20,7 @@ public class GridManager : MonoBehaviour
     private GridTile playerTile;
 
     [Header("3D map generation")]
-    [SerializeField] private List<GridMapSettings> mapConfigurations;
-    [SerializeField] private GridElementsConfig elementsConfig;
+    [SerializeField] private List<GridElementsConfig> mapConfigurations;
     [SerializeField] private Transform tilesParent = null;
     [SerializeField] private Transform tilePrefab = null;
 
@@ -34,7 +33,7 @@ public class GridManager : MonoBehaviour
     [Header("Debug Guizmos")]
     public Vector3 DebugCubeSize = new Vector3(.8f, .8f, .8f);
 
-    private GridMapSettings currentConfig;
+    private GridElementsConfig currentConfig;
     public GridNode EntryPoint;
     public GridNode ExitPoint;
 
@@ -101,29 +100,29 @@ public class GridManager : MonoBehaviour
 
     private void GenerateEntryPoint()
     {
-        Vector3 pos = elementsConfig.DefaultEntryPos ? Vector3.zero : elementsConfig.CustomEntryPos;
+        Vector3 pos = currentConfig.DefaultEntryPos ? Vector3.zero : currentConfig.CustomEntryPos;
         EntryPoint = GetNodeFromWorldPosition(pos);
         EntryPoint.IsEmpty = false;
-        Element element = Instantiate(elementsConfig.EntryPrefrab, pos, Quaternion.identity, null).GetComponent<Element>();
+        Element element = Instantiate(currentConfig.EntryPrefrab, pos, Quaternion.identity, null).GetComponent<Element>();
         gameManager.RegisterTileElementPair(EntryPoint.Tile, element);
     }
 
     private void GenerateExitPoint()
     {
-        Vector3 pos = elementsConfig.RandomEnemyPos ? GenerateRandomTile() : elementsConfig.CustomEntryPos;
+        Vector3 pos = currentConfig.RandomEnemyPos ? GenerateRandomTile() : currentConfig.CustomEntryPos;
         ExitPoint = GetNodeFromWorldPosition(pos);
         ExitPoint.IsEmpty = false;
-        Element element = Instantiate(elementsConfig.ExitPrefab, pos, Quaternion.identity, null).GetComponent<Element>();
+        Element element = Instantiate(currentConfig.ExitPrefab, pos, Quaternion.identity, null).GetComponent<Element>();
         gameManager.RegisterTileElementPair(ExitPoint.Tile, element);
     }
 
     private void GenerateEnemies()
     {
-        foreach(EnemyConfig e in elementsConfig.enemies)
+        foreach(EnemyConfig e in currentConfig.enemies)
         {
             if (AreTilesAvailable())
             {
-                Vector3 pos = elementsConfig.RandomEnemyPos ? GenerateRandomTile() : e.CustomEnemyPos;
+                Vector3 pos = currentConfig.RandomEnemyPos ? GenerateRandomTile() : e.CustomEnemyPos;
 
                 GridNode node = GetNodeFromWorldPosition(pos);
 
@@ -141,11 +140,11 @@ public class GridManager : MonoBehaviour
 
     private void GenerateItems()
     {
-        foreach (ItemConfig i in elementsConfig.items)
+        foreach (ItemConfig i in currentConfig.items)
         {
             if (AreTilesAvailable())
             {
-                Vector3 pos = elementsConfig.RandomEnemyPos ? GenerateRandomTile() : i.CustomItemPos;
+                Vector3 pos = currentConfig.RandomEnemyPos ? GenerateRandomTile() : i.CustomItemPos;
 
                 GridNode node = GetNodeFromWorldPosition(pos);
 
