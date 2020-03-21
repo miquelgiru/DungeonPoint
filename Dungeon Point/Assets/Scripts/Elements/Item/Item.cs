@@ -9,5 +9,5 @@ public abstract class Item : Element
         base.Start();
      }
 
-    public abstract void ItemSelected();     
+    public abstract void ItemSelected(Player player);     
 }

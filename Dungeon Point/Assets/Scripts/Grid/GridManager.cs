@@ -10,13 +10,26 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get { return instance; } }
     #endregion
 
+    private GameManager gameManager;
+
     private GridNode[,] grid;
+    private List<GridTile> exploredTiles = new List<GridTile>();
+    private List<GridTile> explorableTiles = new List<GridTile>();
+    private List<GridTile> blockedTiles = new List<GridTile>();
+
+    private GridTile playerTile;
 
     [Header("3D map generation")]
     [SerializeField] private List<GridMapSettings> mapConfigurations;
     [SerializeField] private GridElementsConfig elementsConfig;
     [SerializeField] private Transform tilesParent = null;
     [SerializeField] private Transform tilePrefab = null;
+
+    [Header("Tile Materials")]
+    [SerializeField] Material PlayerPosMat;
+    [SerializeField] Material ExploredMat;
+    [SerializeField] Material ExplorableMat;
+    [SerializeField] Material UnexplorabledMat;
 
     [Header("Debug Guizmos")]
     public Vector3 DebugCubeSize = new Vector3(.8f, .8f, .8f);
@@ -33,6 +46,7 @@ public class GridManager : MonoBehaviour
 
     public void Init()
     {
+        gameManager = GameManager.Instance;
         currentConfig = mapConfigurations[0];
         CreateGrid(currentConfig.SizeX, currentConfig.SizeZ);
         CreateMapElements();
@@ -89,15 +103,18 @@ public class GridManager : MonoBehaviour
     {
         Vector3 pos = elementsConfig.DefaultEntryPos ? Vector3.zero : elementsConfig.CustomEntryPos;
         EntryPoint = GetNodeFromWorldPosition(pos);
-        Instantiate(elementsConfig.EntryPrefrab, pos, Quaternion.identity, null);
-        GameManager.Instance.MovePlayer((int)pos.x, (int)pos.z);
+        EntryPoint.IsEmpty = false;
+        Element element = Instantiate(elementsConfig.EntryPrefrab, pos, Quaternion.identity, null).GetComponent<Element>();
+        gameManager.RegisterTileElementPair(EntryPoint.Tile, element);
     }
 
     private void GenerateExitPoint()
     {
         Vector3 pos = elementsConfig.RandomEnemyPos ? GenerateRandomTile() : elementsConfig.CustomEntryPos;
         ExitPoint = GetNodeFromWorldPosition(pos);
-        Instantiate(elementsConfig.ExitPrefab, pos, Quaternion.identity, null);
+        ExitPoint.IsEmpty = false;
+        Element element = Instantiate(elementsConfig.ExitPrefab, pos, Quaternion.identity, null).GetComponent<Element>();
+        gameManager.RegisterTileElementPair(ExitPoint.Tile, element);
     }
 
     private void GenerateEnemies()
@@ -110,10 +127,12 @@ public class GridManager : MonoBehaviour
 
                 GridNode node = GetNodeFromWorldPosition(pos);
 
-                if (!node.HasEnemy)
+                if (!node.HasEnemy && node.IsEmpty)
                 {
-                    Instantiate(e.PrefabEnemy, pos, Quaternion.identity, null);
-                    node.HasEnemy = true;
+                    node.IsEmpty = false;
+                    Enemy enemy = Instantiate(e.PrefabEnemy, pos, Quaternion.identity, null).GetComponent<Enemy>();
+                    enemy.Node = node;
+                    gameManager.RegisterTileElementPair(node.Tile, (Element)enemy);
                 }
             }
          
@@ -122,7 +141,6 @@ public class GridManager : MonoBehaviour
 
     private void GenerateItems()
     {
-
         foreach (ItemConfig i in elementsConfig.items)
         {
             if (AreTilesAvailable())
@@ -131,12 +149,13 @@ public class GridManager : MonoBehaviour
 
                 GridNode node = GetNodeFromWorldPosition(pos);
 
-                if (!node.HasEnemy)
+                if (!node.HasEnemy && node.IsEmpty)
                 {
-                    Instantiate(i.PrefabItem, pos, Quaternion.identity, null);
+                    node.IsEmpty = false;
+                    Item item = Instantiate(i.PrefabItem, pos, Quaternion.identity, null).GetComponent<Item>();
+                    gameManager.RegisterTileElementPair(node.Tile, (Element)item);
                 }
             }
-
         }
     }
 
@@ -161,18 +180,79 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
+    public void UpdateTileNodes(GridTile tile)
+    {
+        UpdateExploredTiles(tile);
+        UpdateExplorableNodes(tile);
+    }
+
+    private void UpdateExploredTiles(GridTile tile)
+    {
+        if (!tile.Node.IsExplored)
+        {
+            tile.Node.IsExplored = true;
+            tile.SetMaterial(ExploredMat);
+        }
+    }
+
+    private void UpdateExplorableNodes(GridTile tile)
+    {
+        playerTile = tile;
+
+        List<GridNode> neightbours = Pathfinder.Instance.GetNeightbours(tile.Node, true);
+        foreach(GridNode n in neightbours)
+        {
+            if (!n.IsExplored)
+            {
+                var dicc = gameManager.GetTilesElementsPairs();
+                if (dicc.ContainsKey(n.Tile))
+                {
+                    dicc[n.Tile].gameObject.SetActive(true);
+
+                    //Check if it is an enemy
+                    Enemy enemy = null;
+                    enemy = dicc[n.Tile] as Enemy;
+                    if(enemy != null)
+                    {
+                        BlockNeightbourTiles(n.Tile, enemy);
+                    }
+                }
+
+                n.IsExplorable = true;
+                n.Tile.SetMaterial(ExplorableMat);
+                explorableTiles.Add(n.Tile);
+            }       
+        }
+    }
+
+    private void BlockNeightbourTiles(GridTile tile, Enemy enemy)
+    {
+        List<GridNode> neightbours = Pathfinder.Instance.GetNeightbours(tile.Node, true);
+        foreach (GridNode n in neightbours)
+        {
+            if(n.Tile != playerTile)
+            {
+                n.Tile.BlockTile();
+                blockedTiles.Add(n.Tile);
+                enemy.blockedTiles.Add(n.Tile);
+            }
+        }
+    }
+
     private void OnDrawGizmos()
     {
-
-        foreach (GridNode pos in grid)
+        if (Application.isPlaying)
         {
-            if (!pos.HasEnemy)
-                Gizmos.color = Color.green;
-            else
-                Gizmos.color = Color.red;
+            foreach (GridNode pos in grid)
+            {
+                if (!pos.HasEnemy)
+                    Gizmos.color = Color.green;
+                else
+                    Gizmos.color = Color.red;
 
-            Gizmos.DrawWireCube(pos.WorldPosition, DebugCubeSize);
-        }
+                Gizmos.DrawWireCube(pos.WorldPosition, DebugCubeSize);
+            }
+        }       
     }
 
 }

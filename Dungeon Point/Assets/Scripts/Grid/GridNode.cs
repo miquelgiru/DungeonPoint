@@ -5,6 +5,7 @@ public class GridNode
     public int X, Y, Z;
     public Vector3 WorldPosition;
     public GridTile Tile;
+    public GridNode ParentNode;
 
     public bool IsExplored = false;
     public bool IsExplorable = false;
@@ -24,7 +25,7 @@ public class GridNode
         }
     }
 
-    public GridNode(int x, int y, int z, Vector3 worldPos, GridTile tile, bool isexplored = true, bool isoccupied = false, bool isblocked = false)
+    public GridNode(int x, int y, int z, Vector3 worldPos, GridTile tile, bool isexplored = false, bool isoccupied = false, bool isblocked = false, bool isempty = true)
     {
         X = x;
         Y = y;
@@ -32,6 +33,7 @@ public class GridNode
         WorldPosition = worldPos;
         IsExplored = isexplored;
         HasEnemy = isoccupied;
+        IsEmpty = isempty;
         Tile = tile;
         Tile.Node = this;
     }

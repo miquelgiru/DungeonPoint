@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3494816323027592091}
   - component: {fileID: 8490882981170021231}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,8 @@ GameObject:
   - component: {fileID: 5351864822761352421}
   - component: {fileID: 4270793958198274371}
   - component: {fileID: 6110737792568267677}
-  m_Layer: 0
+  - component: {fileID: 6573364283479349378}
+  m_Layer: 8
   m_Name: TileGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,3 +173,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteOverlay: {fileID: 8490882981170021231}
   TileMaterial: {fileID: 4270793958198274371}
+--- !u!65 &6573364283479349378
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662619543538307511}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}

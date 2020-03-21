@@ -23,10 +23,10 @@ MonoBehaviour:
   RandomEnemyPos: 1
   enemies:
   - CustomEnemyPos: {x: 0, y: 0, z: 0}
-    PrefabEnemy: {fileID: 2970526675264008192, guid: dca083f1f47997242b586cc2951a4b02,
+    PrefabEnemy: {fileID: 5772226212587689405, guid: dca083f1f47997242b586cc2951a4b02,
       type: 3}
   - CustomEnemyPos: {x: 0, y: 0, z: 0}
-    PrefabEnemy: {fileID: 2970526675264008192, guid: dca083f1f47997242b586cc2951a4b02,
+    PrefabEnemy: {fileID: 5772226212587689405, guid: dca083f1f47997242b586cc2951a4b02,
       type: 3}
   RandomItemPos: 1
   items:
