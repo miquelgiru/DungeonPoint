@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private List<Element> allElements = new List<Element>();
     private Dictionary<GridTile, Element> tileElements = new Dictionary<GridTile, Element>();
 
+    [SerializeField] GameObject VictoryPopup;
     [SerializeField] GameObject GameOverPopup;
 
     [SerializeField] Text HealthHUD;
@@ -48,13 +49,14 @@ public class GameManager : MonoBehaviour
         indexLevel++;
         Pathfinder.Instance.WantToFindNewPath(GridManager.Instance.EntryPoint, GridManager.Instance.ExitPoint);
 
-        StartCoroutine(LateStart(1.0f));
+        StartCoroutine(LateStart(0.5f));
     }
 
     private IEnumerator LateStart(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
 
+        AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.ENTER_DUNGEON);
         tileElements[GridManager.Instance.EntryPoint.Tile].gameObject.SetActive(true);
         TileSelected(GridManager.Instance.EntryPoint.Tile);
     }
@@ -129,6 +131,7 @@ public class GameManager : MonoBehaviour
     public void EnemySelected(Enemy enemy)
     {
         Player.AttackEnemy(enemy);
+        UpdatPlayerHUD();
     }
 
     public void DungeonPassed()
@@ -161,7 +164,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+            AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.VICTORY);
+            StartCoroutine(VictoryCoroutine());
         }
     }
 
@@ -173,6 +177,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDead()
     {
+        AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.GAMEOVER);
         StartCoroutine(GameOverCoroutine());
     }
 
@@ -180,6 +185,14 @@ public class GameManager : MonoBehaviour
     {
         GameOverPopup.SetActive(true);
         yield return new WaitForSeconds(3.0f);
+
+        SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+    }
+
+    private IEnumerator VictoryCoroutine()
+    {
+        VictoryPopup.SetActive(true);
+        yield return new WaitForSeconds(4.0f);
 
         SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
     }

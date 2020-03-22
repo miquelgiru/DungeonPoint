@@ -16,18 +16,6 @@ public class Player
         PlayerPosition = Vector3.zero;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void MovePlayer(int posX, int posZ)
     {
         PlayerPosition = new Vector3(posX, 0, posZ);
@@ -35,6 +23,7 @@ public class Player
 
     public void AttackEnemy(Enemy enemy)
     {
+        AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.ATTACK);
         enemy.Attacked(PlayerAttack, this);
     }
 

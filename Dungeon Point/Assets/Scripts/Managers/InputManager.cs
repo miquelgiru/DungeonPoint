@@ -42,7 +42,11 @@ public class InputManager : MonoBehaviour
                         GridTile tile = hit.collider.GetComponent<GridTile>();
                         if (tile.Node.IsExplorable || tile.Node.IsExplored)
                             if (!tile.Node.IsBlocked && !tile.Node.HasEnemy)
+                            {
+                                AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.ADVANCE);
                                 OnTileSelected?.Invoke(tile);
+
+                            }
                     }
                 }
             }

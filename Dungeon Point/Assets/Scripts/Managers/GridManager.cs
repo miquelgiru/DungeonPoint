@@ -184,7 +184,7 @@ public class GridManager : MonoBehaviour
     {
         Vector3 random = new Vector3(Random.Range(0, currentConfig.SizeX), Random.Range(0, currentConfig.SizeY), Random.Range(0, currentConfig.SizeZ));
 
-        if (!GetNodeFromWorldPosition(random).HasEnemy || GetNodeFromWorldPosition(random).IsEmpty)
+        if (!GetNodeFromWorldPosition(random).HasEnemy && GetNodeFromWorldPosition(random).IsEmpty)
             return random;
         else
             return GenerateRandomTile();
@@ -194,10 +194,13 @@ public class GridManager : MonoBehaviour
     {
         foreach(GridNode node in grid)
         {
-            if (!node.HasEnemy)
+            if (node.IsEmpty)
+            {
                 return true;
+            }
         }
 
+        Debug.Log("NO available nodes");
         return false;
     }
 
@@ -235,6 +238,7 @@ public class GridManager : MonoBehaviour
                     enemy = dicc[n.Tile] as Enemy;
                     if(enemy != null)
                     {
+                        AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.ENEMY_FOUND);
                         BlockNeightbourTiles(n.Tile, enemy);
                     }
                 }

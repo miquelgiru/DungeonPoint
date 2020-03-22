@@ -6,8 +6,8 @@ public class HealthItem : Item
 {
     public override void ItemSelected(Player player)
     {
+        AudioManager.Instance.PlayAudioClipNow(AudioManager.AudioClipType.GRAB_ITEM);
         player.PlayerHealth += 1;
-        Debug.Log(player.PlayerHealth);
         gameObject.SetActive(false);
     }
 }
