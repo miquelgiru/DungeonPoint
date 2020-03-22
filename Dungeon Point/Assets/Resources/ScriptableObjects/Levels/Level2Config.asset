@@ -12,27 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc85dee7cd98a64a8ee985aea0be0f3, type: 3}
   m_Name: Level2Config
   m_EditorClassIdentifier: 
+  SizeX: 10
+  SizeY: 0
+  SizeZ: 10
   DefaultEntryPos: 0
   CustomEntryPos: {x: 0, y: 0, z: 0}
   EntryPrefrab: {fileID: 7534147902907135324, guid: b2e0487ce4d71f94bbcb6096a2a2ddae,
     type: 3}
-  RandomExitPos: 1
-  CustomExitPos: {x: 0, y: 0, z: 0}
+  RandomExitPos: 0
+  CustomExitPos: {x: 9, y: 0, z: 9}
   ExitPrefab: {fileID: 187209420700865907, guid: ea0824ea397876746be6e0a491958026,
     type: 3}
   RandomEnemyPos: 0
   enemies:
-  - CustomEnemyPos: {x: 0, y: 0, z: 0}
+  - CustomEnemyPos: {x: 3, y: 0, z: 3}
     PrefabEnemy: {fileID: 5772226212587689405, guid: dca083f1f47997242b586cc2951a4b02,
       type: 3}
-  - CustomEnemyPos: {x: 0, y: 0, z: 0}
+  - CustomEnemyPos: {x: 9, y: 0, z: 6}
     PrefabEnemy: {fileID: 5772226212587689405, guid: dca083f1f47997242b586cc2951a4b02,
       type: 3}
-  RandomItemPos: 1
+  - CustomEnemyPos: {x: 4, y: 0, z: 5}
+    PrefabEnemy: {fileID: 5772226212587689405, guid: dca083f1f47997242b586cc2951a4b02,
+      type: 3}
+  RandomItemPos: 0
   items:
-  - CustomItemPos: {x: 0, y: 0, z: 0}
+  - CustomItemPos: {x: 0, y: 0, z: 2}
     PrefabItem: {fileID: 7695424598861264928, guid: 3e6aeaf3d7d59824ba6e8b2a39c41b65,
       type: 3}
-  - CustomItemPos: {x: 0, y: 0, z: 0}
+  - CustomItemPos: {x: 6, y: 0, z: 1}
     PrefabItem: {fileID: 1142959308927443128, guid: f7baf3996e97af143a4fa11620d08c0d,
       type: 3}

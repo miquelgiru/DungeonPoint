@@ -985,7 +985,7 @@ MonoBehaviour:
   Name: {fileID: 4409109215113501159}
   name: Dummy
   Description: {fileID: 7133739053941404659}
-  description: 
+  description: This is a small tool to trian warriors
   HealthInfo: {fileID: 3907844685528163971}
   AttackInfo: {fileID: 7001915930309773238}
   blockedTiles: []

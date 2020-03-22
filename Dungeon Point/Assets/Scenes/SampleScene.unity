@@ -335,8 +335,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapConfigurations:
-  - {fileID: 11400000, guid: 4f5c7aae9d42f2044991c34f334cd393, type: 2}
-  elementsConfig: {fileID: 11400000, guid: 8e65db75054b15545b2532f07d01fee0, type: 2}
+  - {fileID: 11400000, guid: 8e65db75054b15545b2532f07d01fee0, type: 2}
+  - {fileID: 11400000, guid: 378edf0f33c790e47a3b0d9b23681359, type: 2}
   tilesParent: {fileID: 1612312648}
   tilePrefab: {fileID: 7081604533117294785, guid: 956b253f9d46698468151affb6a1e149,
     type: 3}
@@ -345,6 +345,7 @@ MonoBehaviour:
   ExplorableMat: {fileID: 2100000, guid: 12e88632ea7819245b89106e141b40db, type: 2}
   UnexplorabledMat: {fileID: 2100000, guid: ffadc5e7fd5e9524ba86ea581a6e8c26, type: 2}
   DebugCubeSize: {x: 0.8, y: 0.8, z: 0.8}
+  levelsCount: 0
 --- !u!114 &484117930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,7 +360,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 875706f76b27cbf4ebb3140da240f9dd, type: 2}
   GameOverPopup: {fileID: 1820886801}
-  EnemyPopup: {fileID: 0}
   HealthHUD: {fileID: 1479344047}
   AttackHUD: {fileID: 2037815248}
   MovesHUD: {fileID: 941794946}

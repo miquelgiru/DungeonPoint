@@ -52,6 +52,7 @@ public class Enemy : Element
     {
         UnLockTiles();
         GameManager.Instance.UnregisterTileElementPair(this);
+        GameManager.Instance.UnregisterElement(this);
         DestroyImmediate(gameObject);
     }
 

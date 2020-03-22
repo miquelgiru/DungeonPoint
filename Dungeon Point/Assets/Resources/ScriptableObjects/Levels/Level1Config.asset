@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc85dee7cd98a64a8ee985aea0be0f3, type: 3}
   m_Name: Level1Config
   m_EditorClassIdentifier: 
+  SizeX: 5
+  SizeY: 0
+  SizeZ: 5
   DefaultEntryPos: 1
   CustomEntryPos: {x: 0, y: 0, z: 0}
   EntryPrefrab: {fileID: 7534147902907135324, guid: b2e0487ce4d71f94bbcb6096a2a2ddae,

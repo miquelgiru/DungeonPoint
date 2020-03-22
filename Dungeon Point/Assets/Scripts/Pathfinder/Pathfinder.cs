@@ -225,7 +225,8 @@ public class Pathfinder : MonoBehaviour
 
     private void ClearPathfinder()
     {
-        Path.Clear();
+        if(Path != null)
+            Path.Clear();
         startNode = null;
         targetNode = null;
     }

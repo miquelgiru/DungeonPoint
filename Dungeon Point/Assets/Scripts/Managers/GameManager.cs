@@ -19,12 +19,12 @@ public class GameManager : MonoBehaviour
     private Dictionary<GridTile, Element> tileElements = new Dictionary<GridTile, Element>();
 
     [SerializeField] GameObject GameOverPopup;
-    [SerializeField] GameObject EnemyPopup;
 
     [SerializeField] Text HealthHUD;
     [SerializeField] Text AttackHUD;
     [SerializeField] Text MovesHUD;
 
+    private int indexLevel = 0;
 
     private void Awake()
     {
@@ -39,7 +39,13 @@ public class GameManager : MonoBehaviour
         InputManager.Instance.OnTileSelected += TileSelected;
         InputManager.Instance.OnEnemySelected += EnemySelected;
 
-        GridManager.Instance.Init();
+        LoadLevel();
+    }
+
+    private void LoadLevel()
+    {
+        GridManager.Instance.InitLevel(indexLevel);
+        indexLevel++;
         Pathfinder.Instance.WantToFindNewPath(GridManager.Instance.EntryPoint, GridManager.Instance.ExitPoint);
 
         StartCoroutine(LateStart(1.0f));
@@ -59,6 +65,12 @@ public class GameManager : MonoBehaviour
             allElements.Add(element);
     }
 
+    public void UnregisterElement(Element element)
+    {
+        if (allElements.Contains(element))
+            allElements.Remove(element);
+    }
+
     public List<Element> GetElementsList()
     {
         return allElements;
@@ -66,7 +78,8 @@ public class GameManager : MonoBehaviour
 
     public void RegisterTileElementPair(GridTile tile, Element element)
     {
-        tileElements.Add(tile, element);
+        if(!tileElements.ContainsKey(tile))
+            tileElements.Add(tile, element);
     }
 
     public void UnregisterTileElementPair(GridTile tile)
@@ -121,7 +134,35 @@ public class GameManager : MonoBehaviour
     public void DungeonPassed()
     {
         Debug.Log("Dungeon survived");
-        SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+        ClearLevel();
+
+        LoadNextDungeon();
+    }
+
+    private void ClearLevel()
+    {
+        tileElements.Clear();
+        GridManager.Instance.ClearGrid();
+        Pathfinder.Instance.Path = null;
+
+        for(int i = allElements.Count - 1; i >= 0; i--)
+        {
+            DestroyImmediate(allElements[i].gameObject);
+        }
+
+        allElements.Clear();
+    }
+
+    private void LoadNextDungeon()
+    {
+        if(indexLevel < GridManager.Instance.levelsCount)
+        {
+            LoadLevel();
+        }
+        else
+        {
+            SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+        }
     }
 
     private void UpdatPlayerHUD()

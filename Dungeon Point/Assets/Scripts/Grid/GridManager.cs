@@ -37,18 +37,40 @@ public class GridManager : MonoBehaviour
     public GridNode EntryPoint;
     public GridNode ExitPoint;
 
+    public int levelsCount = 0;
 
     private void Awake()
     {
         instance = this;
+        levelsCount = mapConfigurations.Count;
     }
 
-    public void Init()
+    public void InitLevel(int indexLevel)
     {
         gameManager = GameManager.Instance;
-        currentConfig = mapConfigurations[0];
+        currentConfig = mapConfigurations[indexLevel];
         CreateGrid(currentConfig.SizeX, currentConfig.SizeZ);
         CreateMapElements();
+    }
+
+    public void ClearGrid()
+    {
+        exploredTiles.Clear();
+        explorableTiles.Clear();
+        blockedTiles.Clear();
+
+        EntryPoint = null;
+        ExitPoint = null;
+
+        for(int i = currentConfig.SizeX -1; i >= 0; i--)
+        {
+            for (int j = currentConfig.SizeZ - 1; j >= 0; j--)
+            {
+                DestroyImmediate(grid[i, j].Tile.gameObject);
+            }
+        }
+
+        grid = null;
     }
 
     private void CreateGrid(int sizeX, int sizeZ)
@@ -109,7 +131,7 @@ public class GridManager : MonoBehaviour
 
     private void GenerateExitPoint()
     {
-        Vector3 pos = currentConfig.RandomEnemyPos ? GenerateRandomTile() : currentConfig.CustomEntryPos;
+        Vector3 pos = currentConfig.RandomEnemyPos ? GenerateRandomTile() : currentConfig.CustomExitPos;
         ExitPoint = GetNodeFromWorldPosition(pos);
         ExitPoint.IsEmpty = false;
         Element element = Instantiate(currentConfig.ExitPrefab, pos, Quaternion.identity, null).GetComponent<Element>();
@@ -240,7 +262,7 @@ public class GridManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
+        if (Application.isPlaying && grid != null)
         {
             foreach (GridNode pos in grid)
             {
